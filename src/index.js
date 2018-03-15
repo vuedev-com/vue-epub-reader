@@ -1,8 +1,3 @@
-import BookReader from './components/BookReader.vue'
-import PreferencesDropdown from './components/PreferencesDropdown.vue'
-
-// Expose the components
-export default {
-  BookReader,
-  PreferencesDropdown
-}
+import './main.scss'
+export BookReader from './components/book-reader/'
+export PreferencesDropdown from './components/preferences-dropdown/'
