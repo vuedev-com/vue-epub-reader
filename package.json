@@ -2,10 +2,7 @@
   "name": "vue-epub-reader",
   "description": "Wrapper around epubjs for Vue",
   "version": "0.0.1",
-  "author": {
-    "name": "Saymon",
-    "email": "saymon.biz@gmail.com"
-  },
+  "author": "Saymon <saymon.biz@gmail.com>",
   "keywords": [
     "vue",
     "vuejs",
@@ -55,6 +52,8 @@
     "webpack-merge": "^1.1.2"
   },
   "dependencies": {
-    "epubjs": "^0.3.58"
+    "epubjs": "^0.3.58",
+    "latest": "^0.2.0",
+    "vue": "^2.5.16"
   }
 }
