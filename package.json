@@ -45,6 +45,7 @@
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
+    "vue": "^2.5.16",
     "vue-loader": "^10.0.0",
     "vue-style-loader": "^4.0.2",
     "vue-template-compiler": "^2.1.6",
@@ -52,7 +53,6 @@
     "webpack-merge": "^1.1.2"
   },
   "dependencies": {
-    "epubjs": "^0.3.58",
-    "vue": "^2.5.16"
+    "epubjs": "^0.3.58"
   }
 }
