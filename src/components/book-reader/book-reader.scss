@@ -11,7 +11,7 @@ body {
   text-decoration: none;
   display: inline-block;
   font-size: 22px;
-  margin: 92px 86px;
+  margin: 26px -115px;
   border-radius: 50%;
   font-family: 'Montserrat', sans-serif;
 }
@@ -20,19 +20,14 @@ body {
   visibility: visible;
 }
 
-.container {
-  display: inline-block;
-  vertical-align: top;
-}
-
 .hover {
   background-color: #f8f8f8;
   font-family: 'Montserrat', sans-serif;
   width: 129px;
-  margin-left: 51px;
+  margin-left: 93px;
   padding-top: 5px;
   text-align: center;
-  margin-top: -78px;
+  margin-top: -13px;
 }
 
 .text {
@@ -109,11 +104,11 @@ body {
 
 #area {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /*margin-top: 50px;*/
   width: 65%;
+  height:80%;
 }
 #area iframe {
   border: none;
@@ -128,4 +123,13 @@ body {
 
 button {
   outline:none;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.epub-reading-progress-bar {
+  margin-top: 85vh;
+  margin-left: 50vw;
 }

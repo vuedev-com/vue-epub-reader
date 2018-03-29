@@ -1,27 +1,62 @@
 <template>
   <div>
-    <button class="buton" @click="toggleDropdown">Aa</button>
-    <div class="hover" v-if="opened">
-      <p class="text">ТЕКСТ</p>
-      <div id="gray-line">
-        <button class="text-size" id="little-letter" @click="fontSizeDecrease">A</button>
-        <button class="text-size" id="big-letter" @click="fontSizeIncrease">A</button>
+    <slot name="book-content" :showContent="showContent" :showPage="showPage">
+      <button class="my-find my-content" @click="showContent">
+        <img src="/static/left-alignment.svg" alt="">
+      </button>
+      <div class="search-widget" v-if="openContentWidget">
+        <ul>
+          <li v-for="item in toc" :key="item.id" @click="showPage(item.href)">
+            <p>{{item.label}}</p>
+          </li>
+        </ul>
       </div>
-      <p class="text">ФОН</p>
-      <button
-        class="button-background"
-        :class="{'current': key === currentTheme}"
-        :style="theme.body"
-        v-for="(theme, key) in themes"
-        id="key"
-        :key="key"
-        @click="selectTheme(key)"
-      >{{ theme.name }}</button>
-    </div>
+    </slot>
+    <slot name="book-search"
+      :toggleSearchWidget="toggleSearchWidget"
+      :findText="findText"
+      :removeHighlight="removeHighlight"
+      :showPage="showPage"
+    >
+      <button class="my-find" @click="toggleSearchWidget">
+        <img src="/static/search.svg" alt="">
+      </button>
+      <div class="search-widget" v-if="openSearchWidget">
+        <input type="text"
+          :value="value"
+          @change="findText($event.target.value)"
+        >
+        <button @click="removeHighlight">x</button>
+        <ul>
+          <li v-for="(excerpt, i) in content" :key="i" @click="showPage(excerpt.cfi)">
+            <p>{{excerpt.excerpt}}</p>
+          </li>
+        </ul>
+      </div>
+    </slot>
+    <slot name="book-appearance" :toggleDropdown="toggleDropdown" :fontSizeDecrease="fontSizeDecrease" :fontSizeIncrease="fontSizeIncrease" :selectTheme="selectTheme">
+      <button class="buton" @click="toggleDropdown">Aa</button>
+      <div class="hover" v-if="opened">
+        <p class="text">ТЕКСТ</p>
+        <div id="gray-line">
+          <button class="text-size" id="little-letter" @click="fontSizeDecrease">A</button>
+          <button class="text-size" id="big-letter" @click="fontSizeIncrease">A</button>
+        </div>
+        <p class="text">ФОН</p>
+        <button
+          class="button-background"
+          :class="{'current': key === currentTheme}"
+          :style="theme.body"
+          v-for="(theme, key) in themes"
+          id="key"
+          :key="key"
+          @click="selectTheme(key)"
+        >{{ theme.name }}</button>
+      </div>
+    </slot>
   </div>
 </template>
 <script>
-const step = 10
 export default {
   name: 'PreferencesDropdown',
   props: {
@@ -35,12 +70,26 @@ export default {
     },
     fontSize: {
       type: Number
+    },
+    value: {
+      type: String,
+      required: true
+    },
+    fontSizeStep: {
+      type: Number,
+      default: 10
     }
   },
   data () {
     return {
       opened: false,
-      internalFontSize: 100
+      openSearchWidget: false,
+      openContentWidget: false,
+      internalFontSize: 100,
+      searchText: '',
+      matches: [],
+      content: [],
+      toc: null
     }
   },
   watch: {
@@ -63,12 +112,50 @@ export default {
     },
 
     fontSizeIncrease () {
-      this.internalFontSize += step
+      this.internalFontSize += this.fontSizeStep
     },
 
     fontSizeDecrease () {
-      this.internalFontSize -= step
+      this.internalFontSize -= this.fontSizeStep
+    },
+
+    toggleSearchWidget () {
+      this.openSearchWidget = !this.openSearchWidget
+    },
+
+    showContent () {
+      this.openContentWidget = !this.openContentWidget
+      this.$root.$emit('showContent')
+    },
+
+    findText (value) {
+      this.$emit('input', value)
+      fetch('http://localhost:8085/search?q=' + value + '&uuid=01bf2ad2-b8f5-43cf-9089-1a1d0299bf83')
+        .then(res => res.json())
+        .then(matches => {
+          this.matches = matches
+          this.matches.map((item) => {
+            return item.cfis
+          }).map((item) => {
+            return item
+          }).map((e) => {
+            this.content.push(...e)
+          })
+        })
+    },
+
+    showPage (cfi) {
+      this.$root.$emit('showPage', cfi)
+    },
+
+    removeHighlight () {
+      this.$root.$emit('clearHighlight')
     }
+  },
+  mounted () {
+    this.$root.$on('toc', (toc) => {
+      this.toc = toc
+    })
   }
 }
 </script>
