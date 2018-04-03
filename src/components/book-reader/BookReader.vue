@@ -4,7 +4,9 @@
       <slot name="prev-btn" :goToPrevPage="goToPrevPage">
         <div id="prev" class="arrow" @click="goToPrevPage">‹</div>
       </slot>
-      <div ref="viewer" id="area"></div>
+      <slot name="book-content">
+        <div id="area"></div>
+      </slot>
       <slot name="next-btn" :goToNextPage="goToNextPage">
         <div id="next" class="arrow" @click="goToNextPage">›</div>
       </slot>
@@ -52,6 +54,10 @@ export default {
     progress: {
       type: Number,
       required: true
+    },
+    bookArea: {
+      type: String,
+      default: 'area'
     }
   },
   data () {
@@ -81,7 +87,7 @@ export default {
   },
   methods: {
     initReader () {
-      this.rendition = this.book.renderTo(this.$refs.viewer, {
+      this.rendition = this.book.renderTo(this.bookArea, {
         contained: true
       })
       this.registerThemes()
