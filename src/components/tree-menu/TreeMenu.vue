@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li v-for="title in subContent" :key="title.id">
-    <p @click="showPage(title.href)">{{ title.label }}</p>
+      <a @click="showPage(title.href)">{{ title.label }}</a>
     <template v-if="title.subitems">
         <TreeMenu :subContent="title.subitems"></TreeMenu>
     </template>
