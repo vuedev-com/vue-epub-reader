@@ -5,7 +5,7 @@
         <div id="prev" class="arrow" @click="goToPrevPage">‹</div>
       </slot>
       <slot name="book-content">
-        <div id="area"></div>
+        <div ref="viewer" :id="bookArea"></div>
       </slot>
       <slot name="next-btn" :goToNextPage="goToNextPage">
         <div id="next" class="arrow" @click="goToNextPage">›</div>
@@ -170,7 +170,7 @@ export default {
     this.book = new Epub(this.epubUrl, {})
     this.book.loaded.navigation.then(({ toc }) => {
       this.toc = toc
-      this.$root.$emit('toc', this.toc)
+      this.$emit('toc', this.toc)
       this.initReader()
       this.showProgress()
     })
