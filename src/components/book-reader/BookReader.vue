@@ -92,7 +92,8 @@ export default {
   methods: {
     initReader () {
       this.rendition = this.book.renderTo(this.bookArea, {
-        contained: true
+        contained: true,
+        height: this.height
       })
       this.registerThemes()
       this.setTheme(this.theme)
@@ -178,6 +179,22 @@ export default {
     resizeToScreenSize () {
       this.updateScreenSizeInfo()
       this.rendition.resize(this.width, this.height)
+    },
+
+    debounce (func, wait, immediate) {
+      let timeout
+      return () => {
+        let context = this
+        let args = arguments
+        let later = () => {
+          timeout = null
+          if (!immediate) func.apply(context, args)
+        }
+        let callNow = immediate && !timeout
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+        if (callNow) func.apply(context, args)
+      }
     }
   },
   mounted () {
@@ -198,9 +215,9 @@ export default {
     })
 
     this.$nextTick(() => {
-      window.addEventListener('resize', () => {
+      window.addEventListener('resize', this.debounce(() => {
         this.resizeToScreenSize()
-      })
+      }, 250))
     })
 
     this.updateScreenSizeInfo()
