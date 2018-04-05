@@ -5,11 +5,7 @@
         <img src="/static/left-alignment.svg" alt="">
       </button>
       <div class="search-widget" v-if="openContentWidget">
-        <ul>
-          <li v-for="item in toc" :key="item.id" @click="showPage(item.href)">
-            <p>{{item.label}}</p>
-          </li>
-        </ul>
+        <TreeMenu :subContent="toc"/>
       </div>
     </slot>
     <slot name="book-search"
@@ -23,12 +19,12 @@
       </button>
       <div class="search-widget" v-if="openSearchWidget">
         <input type="text"
-          :value="value"
-          @change="findText($event.target.value)"
+         :value="value"
+         @change="findText($event.target.value)"
         >
         <button @click="removeHighlight">x</button>
         <ul>
-          <li v-for="(excerpt, i) in content" :key="i" @click="showPage(excerpt.cfi)">
+          <li v-for="(excerpt, i) in searchResults" :key="i" @click="showPage(excerpt.cfi)">
             <p>{{excerpt.excerpt}}</p>
           </li>
         </ul>
@@ -57,8 +53,13 @@
   </div>
 </template>
 <script>
+import TreeMenu from '../tree-menu/'
+const step = 10
 export default {
   name: 'PreferencesDropdown',
+  components: {
+    TreeMenu
+  },
   props: {
     themes: {
       type: Object,
@@ -74,10 +75,6 @@ export default {
     value: {
       type: String,
       required: true
-    },
-    fontSizeStep: {
-      type: Number,
-      default: 10
     }
   },
   data () {
@@ -88,7 +85,7 @@ export default {
       internalFontSize: 100,
       searchText: '',
       matches: [],
-      content: [],
+      searchResults: [],
       toc: null
     }
   },
@@ -112,11 +109,11 @@ export default {
     },
 
     fontSizeIncrease () {
-      this.internalFontSize += this.fontSizeStep
+      this.internalFontSize += step
     },
 
     fontSizeDecrease () {
-      this.internalFontSize -= this.fontSizeStep
+      this.internalFontSize -= step
     },
 
     toggleSearchWidget () {
@@ -131,17 +128,18 @@ export default {
     findText (value) {
       this.$emit('input', value)
       fetch('http://localhost:8085/search?q=' + value + '&uuid=01bf2ad2-b8f5-43cf-9089-1a1d0299bf83')
-        .then(res => res.json())
-        .then(matches => {
-          this.matches = matches
-          this.matches.map((item) => {
-            return item.cfis
-          }).map((item) => {
-            return item
-          }).map((e) => {
-            this.content.push(...e)
+          .then(res => res.json())
+          .then(matches => {
+            this.matches = matches
+            this.matches.map((item) => {
+              return item.cfis
+            }).map((item) => {
+              return item
+            }).map((e) => {
+              this.searchResults.push(...e)
+            })
+            this.$emit('searchResults', this.searchResults)
           })
-        })
     },
 
     showPage (cfi) {

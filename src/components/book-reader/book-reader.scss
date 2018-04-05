@@ -108,7 +108,6 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 65%;
-  height:80%;
 }
 #area iframe {
   border: none;
@@ -130,6 +129,7 @@ button {
 }
 
 .epub-reading-progress-bar {
-  margin-top: 85vh;
-  margin-left: 50vw;
+  position:absolute;
+  bottom: 30px;
+  left: 50%
 }
