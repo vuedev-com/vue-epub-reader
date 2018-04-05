@@ -58,6 +58,10 @@ export default {
     bookArea: {
       type: String,
       default: 'area'
+    },
+    contentBookModify: {
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -164,6 +168,16 @@ export default {
 
     onMouseup () {
       this.mouseDown = false
+    },
+
+    updateScreenSizeInfo () {
+      this.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+      this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - this.contentBookModify
+    },
+
+    resizeToScreenSize () {
+      this.updateScreenSizeInfo()
+      this.rendition.resize(this.width, this.height)
     }
   },
   mounted () {
@@ -182,6 +196,14 @@ export default {
     this.$root.$on('clearHighlight', () => {
       this.rendition.annotations.remove('epubcfi(' + this.cfi + ')')
     })
+
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        this.resizeToScreenSize()
+      })
+    })
+
+    this.updateScreenSizeInfo()
   }
 }
 </script>
