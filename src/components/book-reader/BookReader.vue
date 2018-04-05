@@ -73,7 +73,9 @@ export default {
       progressValue: 0,
       slide: null,
       mouseDown: false,
-      cfi: null
+      cfi: null,
+      width: 0,
+      height: 0
     }
   },
   watch: {
