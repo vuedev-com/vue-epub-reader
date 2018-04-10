@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="conteiner">
+    <div class="epub-container">
       <slot name="prev-btn" :goToPrevPage="goToPrevPage">
         <div id="prev" class="arrow" @click="goToPrevPage">‹</div>
       </slot>
       <slot name="book-content">
-        <div ref="viewer" :id="bookArea"></div>
+        <div :id="bookArea"></div>
       </slot>
       <slot name="next-btn" :goToNextPage="goToNextPage">
         <div id="next" class="arrow" @click="goToNextPage">›</div>
@@ -197,6 +197,15 @@ export default {
         timeout = setTimeout(later, wait)
         if (callNow) func.apply(context, args)
       }
+    },
+
+    keyListener (e) {
+      if ((e.keyCode || e.which) === 37) {
+        this.rendition.prev()
+      }
+      if ((e.keyCode || e.which) === 39) {
+        this.rendition.next()
+      }
     }
   },
   mounted () {
@@ -206,6 +215,9 @@ export default {
       this.$emit('toc', this.toc)
       this.initReader()
       this.showProgress()
+      this.rendition.on('click', () => {
+        this.$emit('closeAppearanceMenu', false)
+      })
     })
 
     this.$root.$on('showPage', (cfi) => {
@@ -223,6 +235,14 @@ export default {
     })
 
     this.updateScreenSizeInfo()
+  },
+
+  created () {
+    window.addEventListener('keyup', this.keyListener)
+  },
+
+  beforeDestroy () {
+    window.removeEventListener('keyup', this.keyListener)
   }
 }
 </script>

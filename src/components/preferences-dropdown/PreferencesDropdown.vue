@@ -1,6 +1,6 @@
 <template>
   <div>
-    <slot name="book-content" :showContent="showContent" :showPage="showPage">
+    <slot name="book-content" :showContent="showContent">
       <button class="my-find my-content" @click="showContent">
         <img src="/static/left-alignment.svg" alt="">
       </button>
