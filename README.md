@@ -17,18 +17,7 @@ Wrapper around epubjs for Vue
 npm install --save vue-epub-reader
 ```
 
-## Default import
-
-Install all the components:
-
-```javascript
-import Vue from 'vue'
-import VueEpubReader from 'vue-epub-reader'
-
-Vue.use(VueEpubReader)
-```
-
-Use specific components:
+## Import
 
 ```javascript
 import Vue from 'vue'
@@ -42,76 +31,6 @@ components: {
 ```
 
 **⚠️ A css file is included when importing the package. You may have to setup your bundler to embed the css in your page.**
-
-## Distribution import
-
-Install all the components:
-
-```javascript
-import 'vue-epub-reader/dist/vue-epub-reader.css'
-import VueEpubReader from 'vue-epub-reader/dist/vue-epub-reader.common'
-
-Vue.use(VueEpubReader)
-```
-
-Use specific components:
-
-```javascript
-import { BookReader, PreferencesDropdown, TreeMenu } from 'vue-epub-reader'
-
-components: {
-    BookReader,
-    PreferencesDropdown,
-    TreeMenu
-}
-```
-
-**⚠️ You may have to setup your bundler to embed the css file in your page.**
-
-## Browser
-
-```html
-<link rel="stylesheet" href="vue-epub-reader/dist/vue-epub-reader.css"/>
-
-<script src="vue.js"></script>
-<script src="vue-epub-reader/dist/vue-epub-reader.browser.js"></script>
-```
-
-The plugin should be auto-installed. If not, you can install it manually with the instructions below.
-
-Install all the components:
-
-```javascript
-Vue.use(VueEpubReader)
-```
-
-Use specific components:
-
-```javascript
-Vue.component('test', VueEpubReader.Test)
-```
-
-## Source import
-
-Install all the components:
-
-```javascript
-import Vue from 'vue'
-import VueEpubReader from 'vue-epub-reader/src'
-
-Vue.use(VueEpubReader)
-```
-
-Use specific components:
-
-```javascript
-import Vue from 'vue'
-import { Test } from 'vue-epub-reader/src'
-
-Vue.component('test', Test)
-```
-
-**⚠️ You need to configure your bundler to compile `.vue` files.** More info [in the official documentation](https://vuejs.org/v2/guide/single-file-components.html).
 
 ## Components
 
@@ -152,7 +71,7 @@ Each slot has certain methods for working with a book
 | method  | slot | Description |
 | ------ | ------ | ------ |
 | goToPrevPage | prev-btn | go to the next "page" |
-| next-btn | goToNextPage | go to the previous "page" |
+| goToNextPage | next-btn | go to the previous "page" |
 | onChange | progress-bar | event `change` for input, that is the progress bar of reading a book. It    |
 | onMousedown | progress-bar | event `mousedown` by clicking on the progress bar |
 | onMouseup | progress-bar | event `mouseup` by clicking on the progress bar |
