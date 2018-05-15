@@ -80,7 +80,7 @@ Each slot has certain methods for working with a book
 #### Custom events
 | method | Description |
 | ------ | ------ |
-| toc | get content of books |
+| toc | get table of contents of book |
 | closeAppearanceMenu | close appearance menu on click on book |
 
 
@@ -216,21 +216,21 @@ export default {
             color: '#000000',
             background: '#ffffff'
           },
-          name: 'БЕЛЫЙ'
+          name: 'WHITE'
         },
         beige: {
           body: {
             color: '#000000',
             background: '#f3e8d2'
           },
-          name: 'БЕЖЕВЫЙ'
+          name: 'BEIGE'
         },
         night: {
           body: {
             color: '#ffffff',
             background: '#4a4a4a'
           },
-          name: 'НОЧНОЙ'
+          name: 'NIGHT'
         }
       },
       serchQuery: '',
@@ -269,7 +269,7 @@ export default {
 
 # Example
 
-> TODO
+You can play around with that [here](https://codesandbox.io/s/zxzwm75ym4)
 
 ---
 

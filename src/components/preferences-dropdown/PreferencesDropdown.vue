@@ -33,12 +33,12 @@
     <slot name="book-appearance" :toggleDropdown="toggleDropdown" :fontSizeDecrease="fontSizeDecrease" :fontSizeIncrease="fontSizeIncrease" :selectTheme="selectTheme">
       <button class="buton" @click="toggleDropdown">Aa</button>
       <div class="hover" v-if="opened">
-        <p class="text">ТЕКСТ</p>
+        <p class="text">TEXT</p>
         <div id="gray-line">
           <button class="text-size" id="little-letter" @click="fontSizeDecrease">A</button>
           <button class="text-size" id="big-letter" @click="fontSizeIncrease">A</button>
         </div>
-        <p class="text">ФОН</p>
+        <p class="text">BACKGROUND</p>
         <button
           class="button-background"
           :class="{'current': key === currentTheme}"
