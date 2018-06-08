@@ -4,24 +4,22 @@
       <slot name="prev-btn" :goToPrevPage="goToPrevPage">
         <div id="prev" class="arrow" @click="goToPrevPage">‹</div>
       </slot>
-      <slot name="book-content">
+      <slot name="book-content" :ready="ready">
         <div :id="bookArea"></div>
       </slot>
       <slot name="next-btn" :goToNextPage="goToNextPage">
         <div id="next" class="arrow" @click="goToNextPage">›</div>
       </slot>
     </div>
-    <slot name="progress-bar" :onChange="onChange" :onMousedown="onMousedown" :onMouseup="onMouseup">
+    <slot name="progress-bar" :onChange="onChange" :ready="ready">
       <div class="epub-reading-progress-bar">
         <input size="3" type="range" max="100" min="0" step="1"
          @change="onChange($event.target.value)"
          :value="progress"
         /> %
         <input type="text"
-         @change="onChange($event.target.value)"
-         @mousedown="onMousedown"
-         @mouseup="onMouseup"
          :value="progress"
+         @change="onChange($event.target.value)"
         >
       </div>
     </slot>
@@ -72,10 +70,11 @@ export default {
       toc: [],
       progressValue: 0,
       slide: null,
-      mouseDown: false,
       cfi: null,
       width: 0,
-      height: 0
+      height: 0,
+      locations: null,
+      ready: false
     }
   },
   watch: {
@@ -99,6 +98,7 @@ export default {
       })
       this.registerThemes()
       this.setTheme(this.theme)
+      this.setFontSize(this.fontSize)
       this.rendition.display()
     },
 
@@ -132,45 +132,11 @@ export default {
       }
     },
 
-    showProgress () {
-      this.book.ready.then(() => {
-        let key = this.book.key() + '-locations'
-        let stored = localStorage.getItem(key)
-        if (stored) {
-          return this.book.locations.load(stored)
-        } else {
-          return this.book.locations.generate(1600)
-        }
-      }).then((locations) => {
-        let cfi = this.book.locations.cfiFromPercentage(this.progress / 100)
-        this.rendition.display(cfi).then(() => {
-          let currentLocation = this.rendition.currentLocation()
-          let currentPage = this.book.locations.percentageFromCfi(currentLocation.start.cfi)
-          if (currentPage > 0) {
-            this.progressValue = currentPage
-          }
-        })
-
-        this.rendition.on('relocated', (location) => {
-          let percent = this.book.locations.percentageFromCfi(location.start.cfi)
-          let percentage = Math.floor(percent * 100)
-          this.progressValue = percentage
-        })
-        localStorage.setItem(this.book.key() + '-locations', this.book.locations.save())
-      })
-    },
-
     onChange (value) {
-      let cfi = this.book.locations.cfiFromPercentage(value / 100)
-      this.rendition.display(cfi)
-    },
-
-    onMousedown () {
-      this.mouseDown = true
-    },
-
-    onMouseup () {
-      this.mouseDown = false
+      const percentage = value / 100
+      const target = percentage > 0 ? this.book.locations.cfiFromPercentage(percentage) : 0
+      this.rendition.display(target)
+      if (percentage === 1) this.goToNextPage()
     },
 
     updateScreenSizeInfo () {
@@ -214,9 +180,20 @@ export default {
       this.toc = toc
       this.$emit('toc', this.toc)
       this.initReader()
-      this.showProgress()
       this.rendition.on('click', () => {
-        this.$emit('closeAppearanceMenu', false)
+        this.$emit('click')
+      })
+    })
+    this.book.ready.then(() => {
+      return this.book.locations.generate()
+    }).then(() => {
+      this.locations = JSON.parse(this.book.locations.save())
+      this.ready = true
+      this.rendition.on('relocated', (location) => {
+        const percent = this.book.locations.percentageFromCfi(location.start.cfi)
+        const percentage = Math.floor(percent * 100)
+        this.progressValue = percentage
+        this.$emit('relocated')
       })
     })
 

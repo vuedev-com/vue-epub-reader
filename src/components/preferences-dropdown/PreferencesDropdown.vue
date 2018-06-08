@@ -82,7 +82,7 @@ export default {
       opened: false,
       openSearchWidget: false,
       openContentWidget: false,
-      internalFontSize: 100,
+      internalFontSize: this.fontSize,
       searchText: '',
       matches: [],
       searchResults: [],
