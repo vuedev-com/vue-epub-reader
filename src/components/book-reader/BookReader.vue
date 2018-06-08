@@ -189,6 +189,7 @@ export default {
     }).then(() => {
       this.locations = JSON.parse(this.book.locations.save())
       this.ready = true
+      this.$emit('ready')
       this.rendition.on('relocated', (location) => {
         const percent = this.book.locations.percentageFromCfi(location.start.cfi)
         const percentage = Math.floor(percent * 100)
@@ -201,15 +202,14 @@ export default {
       this.cfi = cfi
       this.goToExcerpt(cfi)
     })
+
     this.$root.$on('clearHighlight', () => {
       this.rendition.annotations.remove('epubcfi(' + this.cfi + ')')
     })
 
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.debounce(() => {
-        this.resizeToScreenSize()
-      }, 250))
-    })
+    window.addEventListener('resize', this.debounce(() => {
+      this.resizeToScreenSize()
+    }, 250))
 
     this.updateScreenSizeInfo()
   },
