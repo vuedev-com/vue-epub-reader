@@ -1,4 +1,7 @@
-# vue-epub-reader
+> vue-epub-reader
+
+# ⚠️ This package was created for educational purposes only.
+# ⛔️ Don't use it in production.
 
 [![npm](https://img.shields.io/npm/v/vue-epub-reader.svg) ![npm](https://img.shields.io/npm/dm/vue-epub-reader.svg)](https://www.npmjs.com/package/vue-epub-reader)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
